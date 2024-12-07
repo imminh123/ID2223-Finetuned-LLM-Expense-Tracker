@@ -44,7 +44,7 @@ const ChatUI: React.FC = () => {
         },
         {
           role: "user",
-          content: `Do not write code. Parse the input string and return JSON format. Here's the field: type (default "expense"), name, amount, date (dd/MM/2024). \n Input: ${userInput}`,
+          content: `Do not write code. Parse the input string and return JSON format. Here's the field: type (default "expense"), name, amount, date (dd/MM/yyyy) \n Input: ${userInput}`,
         },
       ];
 
@@ -55,8 +55,15 @@ const ChatUI: React.FC = () => {
         amount: number;
         date: string;
       };
+
       try {
-        parseExpense = JSON.parse(parseResponse);
+        let cleanedData = parseResponse
+          .replace(/^\"/, '') // Remove the starting quote
+          .replace(/\"$/, '') // Remove the ending quote
+          .replace(/\\"/g, '"') // Replace escaped quotes with actual quotes
+          .replace(/\\n/g, ''); // Remove newline escape sequences
+
+        parseExpense = JSON.parse(cleanedData);
       } catch (error) {
         console.error("Error parsing JSON response from Together API:", error);
         throw new Error("Error parsing JSON response from Together API");
@@ -81,11 +88,11 @@ const ChatUI: React.FC = () => {
           {
             role: "system",
             content:
-              "You are a angry and sarcastic assistant. User has been wasting money again. ",
+              "You are a angry and sarcastic assistant. User has been wasting money again.",
           },
           {
             role: "user",
-            content: `I spent SEK ${expense.amount} on ${expense.name}. What do you think in short?`,
+            content: `I spent SEK ${expense.amount} on ${expense.name}. Mock me harshly in 1 or 2 sentences.`,
           },
         ]);
 
@@ -191,6 +198,7 @@ const ChatUI: React.FC = () => {
         <input
           type="text"
           value={input}
+          onKeyDown={handleKeyPress}
           onChange={(e) => setInput(e.target.value)}
           className="input input-bordered w-full"
           placeholder="Type a message..."
@@ -199,7 +207,6 @@ const ChatUI: React.FC = () => {
 
       <div className="flex justify-center items-center mt-5">
         <button
-          onKeyDown={handleKeyPress}
           onClick={handleSendMessage}
           className="btn btn-primary w-full"
         >
