@@ -3,10 +3,6 @@ import axios from "axios";
 import ExpenseWidget from "./ExpenseWidget";
 import { parseDate } from "./util";
 import { Expense, Message } from "./types";
-import Together from "together-ai";
-const togetherClient = new Together({
-  apiKey: process.env.REACT_APP_TOGETHER_API_KEY,
-});
 
 const ChatUI: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -15,18 +11,9 @@ const ChatUI: React.FC = () => {
   const [popupVisible, setPopupVisible] = useState<boolean>(false);
   const [filteredExpenses, setFilteredExpenses] = useState<Expense[]>([]);
 
-  // Together AI client
-
   const callTogetherAPI = async (messages: any): Promise<string> => {
-    const model = "meta-llama/Llama-3.2-3B-Instruct-Turbo";
     try {
-      // const response = await togetherClient.chat.completions.create({
-      //   model,
-      //   messages,
-      // });
-
-      // axios post to http://0.0.0.0:8000/chat
-      const response = await axios.post("http://0.0.0.0:8000/chat", messages);
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}`, messages);
       return response.data['assistant'];
       // return response?.choices[0]?.message?.content || ""; // Assuming Together API follows OpenAI response format
     } catch (error) {
