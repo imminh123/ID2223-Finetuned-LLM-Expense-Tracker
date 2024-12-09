@@ -11,6 +11,9 @@ We are building a sassy assistant to help track your spending. The assistant is 
 ### UI
 The UI consists of two main components: a chat interface for logging expenses and conversing with your assistant, and a list interface for displaying your expense records so far.
 
+#### Input Format
+To keep our assistant happy, make sure your input follows this format: **item price date** (the date can be `today` or in DD/MM/YYYY format). It will scold you otherwise ⚠️.
+
 <div style="display: flex; justify-content: space-around;">
   <img src="https://github.com/imminh123/ID2223-Finetuned-LLM-Expense-Tracker/blob/main/images/chat_ui.png?raw=true" alt="Image 1" style="width: 35%;"/>
   <img src="https://github.com/imminh123/ID2223-Finetuned-LLM-Expense-Tracker/blob/main/images/expense_list.png?raw=true" alt="Image 2" style="width: 35%;"/>
